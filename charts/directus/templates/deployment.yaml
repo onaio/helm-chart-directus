@@ -138,6 +138,8 @@ spec:
             - name: templates
               mountPath: /directus/templates
               subPath: templates
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
       {{- if .Values.snapshot }}
         - name: {{ .Chart.Name }}-schema-snapshot
           securityContext:
