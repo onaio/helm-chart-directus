@@ -31,7 +31,11 @@ spec:
       initContainers:
         - name: write-permissions
           image: busybox:1.36
+          # Chown command should only be run for non EFS storage types or whenever persistence is not enabled.
+          # This is due to an EFS issue not allowing chown commands to be run against the volumes: https://github.com/kubernetes-sigs/aws-efs-csi-driver/issues/300#issuecomment-1926118688
+          {{- if or .Values.runChown.enabled (not .Values.persistence.enabled) }}
           command: ["sh","-c","chown -R 1000:1000 /directus/uploads"]
+          {{- end }}
           volumeMounts:
             - name: uploads
               mountPath: /directus/uploads
