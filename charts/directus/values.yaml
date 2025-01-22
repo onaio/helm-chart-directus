@@ -288,6 +288,10 @@ busybox:
     repository: busybox
     tag: 1.36
 
+# Chown command should only be run for non EFS storage types or whenever persistence is not enabled
+runChown:
+  enabled: true
+
 mariadb:
   enabled: true
   ## Global Docker image parameters

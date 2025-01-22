@@ -31,7 +31,9 @@ spec:
       initContainers:
         - name: write-permissions
           image: "{{ .Values.busybox.image.registry }}/{{ .Values.busybox.image.repository }}:{{ .Values.busybox.image.tag }}"
+          {{- if or .Values.runChown.enabled (not .Values.persistence.enabled) }}
           command: ["sh","-c","chown -R 1000:1000 /directus/uploads /directus/extensions /directus/templates"]
+          {{- end }}
           volumeMounts:
             - name: uploads
               mountPath: /directus/uploads
