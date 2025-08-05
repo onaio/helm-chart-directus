@@ -73,7 +73,6 @@ service:
   type: ClusterIP
   port: 80
 
-
 # As we only needed one persistence volume in earlier
 # versions of directus, the default disk is the upload volume.
 persistence:
@@ -115,7 +114,6 @@ persistenceTemplates:
   ## Persistent Volume size
   ##
   size: 8Gi
-
 
 ingress:
   enabled: false
@@ -268,13 +266,25 @@ autoscaling:
   # targetMemoryUtilizationPercentage: 80
 
 startupProbe:
-  enabled: true
+  failureThreshold: 30
+  periodSeconds: 10
+  httpGet:
+    path: /server/health/
+    port: http
 
 livenessProbe:
-  enabled: true
+  initialDelaySeconds: 30
+  periodSeconds: 20
+  httpGet:
+    path: /server/health/
+    port: http
 
 readinessProbe:
-  enabled: true
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  httpGet:
+    path: /server/health/
+    port: http
 
 nodeSelector: {}
 
