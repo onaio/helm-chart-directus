@@ -319,29 +319,17 @@ spec:
             - name: http
               containerPort: 8055
               protocol: TCP
-          {{- if .Values.startupProbe.enabled }}
+          {{- with .Values.startupProbe }}
           startupProbe:
-            httpGet:
-              path: /server/health/
-              port: http
-            failureThreshold: 30
-            periodSeconds: 10
+            {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- if .Values.livenessProbe.enabled }}
+          {{- with .Values.livenessProbe }}
           livenessProbe:
-            initialDelaySeconds: 30
-            periodSeconds: 20
-            httpGet:
-              path: /server/health/
-              port: http
+            {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- if .Values.readinessProbe.enabled }}
+          {{- with .Values.readinessProbe }}
           readinessProbe:
-            initialDelaySeconds: 30
-            periodSeconds: 10
-            httpGet:
-              path: /server/health/
-              port: http
+            {{- toYaml . | nindent 12 }}
           {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
